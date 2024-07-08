@@ -1,0 +1,392 @@
+Ctrl+Alt=R == 
+rafce
+usestate will return two values which will store in array(useState hooks)
+props(params): for ex if we have a header and click any form it will be in the same postion.if suppose have to change the postion of the header, lets go with the props.
+/*  const handleClick = (e) => {
+      console.log(e.target.innerText)
+        }
+  
+    const handleClick2 = (name) => {
+      console.log(`thanks for visiting us ${name} `)
+        }
+ return (
+    <main className="main"><p>Welcome to {changeName()} Learning</p>
+     <button onClick={() => handleClick2('santhiya')}> Click Here </button>
+     </main>
+  )
+  return (
+    <main className="main"><p onDoubleClick={() => handleClick2('santhiya')}>Welcome to {changeName()} Learning</p>
+     <button onClick={(e) => handleClick(e)}> Click Here </button>
+     </main>
+  )*/
+    
+function names() {
+      return console.log("santhiya")
+    }
+
+    const [count, setCount] = useState(10);
+    const [name, setName] = useState(()=>names());
+
+    function plusFun() {
+      setCount((count) => {return count + 1});
+    }
+    function minusFun() {
+      setCount((count) => {return count - 1});
+    }
+    return (
+      <main className="main">
+        <p>Welcome to {changeName()} Learning</p>
+       <button> Click Here </button>
+       <button onClick={() => plusFun()}> + </button>
+       <span> {count}</span>
+       <button onClick={() => minusFun()}> - </button>
+       </main>)
+}
+
+ function changeName() {
+        const names =["Santhiya","Joshitha"];
+        const int = Math.floor(Math.random()*2);
+        setName(names[int])
+    }
+    const [name, setName] = useState(()=>changeName())
+        return (
+      <main className="main">
+        <p>Welcome to {name} Learning</p>
+       <button onClick={() => changeName()}> Click Here </button>
+       </main>)
+
+{items.length ? (
+         <ul> 
+             {items.map(item => (
+              <li className="item" key={item.id}>
+             <input
+                  type = "checkbox"
+                  onChange={()=>handleCheck(item.id)}
+                  checked={item.checked}
+              />
+                  <label 
+                  style ={(item.checked? {textDecoration: 'line-through'} :null)}
+                     onDoubleClick={()=>handleCheck(item.id)}> {item.item}</label>
+                  <FaRegTrashAlt 
+                  role="button"
+                  onClick={()=>handleDelete(item.id)}
+                  tabIndex="0"
+          
+                  />
+                  </li> ) )}
+         </ul> ) : ( <p style={{ marginTop: '2rem', color: 'black' }}> There is no item in the list</p>)
+      }
+
+import Header from './Header';
+import Content from './Content';
+import Footer from './Footer';
+
+import './App.css'; 
+function App() {
+ 
+  return (
+    <div className="App">
+        <Header />
+        <Content />
+        <Footer />
+            </div>
+  );
+}
+
+export default App;
+
+import { useState } from 'react';
+import './index.css';
+import { FaRegTrashAlt } from "react-icons/fa";
+import { FaPlus } from 'react-icons/fa'
+
+const Content = () => {
+  const [newItems, setNewItems] = useState('')
+  const [items, setItems] = useState(JSON.parse(localStorage.getItem('to-do')));
+ const addItem = (item) =>{
+ // e.preventDefault()
+ // console.log(items)
+const id = items.length ? items[items.length - 1].id + 1 : 1;
+const addNewItem = {id,checked:false, item}
+const listItems = [...items, addNewItem]
+ setItems(listItems)
+ localStorage.setItem('to-do', JSON.stringify(listItems));
+}
+const handleSubmit =(e) =>
+  {
+  e.preventDefault()
+  if(!items) return; 
+    console.log(items)
+   addItem(newItems)
+   setNewItems('')
+
+  }
+ 
+ const handleCheck= (id) =>{
+   const listitems = items.map((item) => item.id===id ? {...item,checked:!item.checked} : item);
+   setItems(listitems)
+ localStorage.setItem('to-do', JSON.stringify(listitems));
+   
+ }
+ const handleDelete= (id) =>{
+  const listitems = items.filter((item) => item.id!==id)
+  setItems(listitems)
+  localStorage.setItem('to-do',JSON.stringify(listitems));
+}
+    return (
+      <main className="main">
+         <form className ='searchform' onSubmit={()=>handleSubmit()}>
+        <label htmlFor='addItems'> Add Item</label>
+        <input className ='searchform'
+           autoFocus
+           id='addItem'
+           type='text'
+           placeholder='Add Item'
+           required
+           value = {items}
+           onChange = {(e) => setItems(e.target.value)}
+
+           />
+           <button 
+             type='submit'> <FaPlus /></button>
+    </form>
+    {items.length ? (
+         <ul> 
+             {items.map(item => (
+              <li className="item" key={item.id}>
+             <input
+                  type = "checkbox"
+                  onChange={()=>handleCheck(item.id)}
+                  checked={item.checked}
+              />
+                  <label 
+                  style ={(item.checked? {textDecoration: 'line-through'} :null)}
+                     onDoubleClick={()=>handleCheck(item.id)}> {item.item}</label>
+                  <FaRegTrashAlt 
+                  role="button"
+                  onClick={()=>handleDelete(item.id)}
+                  tabIndex="0"
+          
+                  />
+                  </li> ) )}
+         </ul> ) : ( <p style={{ marginTop: '2rem', color: 'black' }}> There is no item in the list</p>)
+      }
+     </main>
+       )
+      }
+export default Content
+
+import React from 'react'
+import './index.css';
+
+const Footer = ({length}) => {
+ const year = new Date();
+
+  return (
+    <footer className="footer"> Copyright &copy; {year.getFullYear()} {length}</footer>
+  
+  )
+}
+
+export default Footer
+import React from 'react'
+import './index.css';
+
+const Header = () => {
+  return (
+    <header className="header">
+    <h1>To-do List</h1></header>   
+  )
+}
+
+export default Header
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+header {
+  background-color: #e0a056;
+  color: rgb(255, 255, 255);
+}
+main {
+  background-color: #e2e6ec;
+  height: 70vmin;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: rgb(216, 22, 22);
+}
+.item {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0.5rem 0 0.5rem 0.5rem;
+  margin: 0.25rem 0;
+  background-color: #eee;
+}
+.item input[type="checkbox"] {
+  text-align: center;
+  width: 2.5rem;
+  width: 48px;
+  min-width: 48px;
+  height: 2.5rem;
+  height: 48px;
+  min-height: 48px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+.item svg {
+  width: 48px;
+  min-width: 48px;
+  height: 36px;
+  font-size: 1rem;
+  color: steelblue;
+  cursor: pointer;
+}
+.item svg:focus, 
+.item svg:hover {
+  color: red;
+  outline: none;
+}
+.item input[type="checkbox"]:focus + label {
+  text-decoration: underline;
+}
+
+.item > label {
+  font-size: 0.75rem;
+  flex-grow: 1;
+}
+
+footer {
+  background-color: #282c34;
+  color: rgb(255, 255, 255);
+}
+.searchform input {
+  border: none;
+  whitespace: wrap;
+  border-radius: 5px 5px 5px 5px;
+	background: #E9E9E9;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	padding: 0.35em 0.75em;
+	border: none;
+	font-size: 1.1em;
+	text-decoration: none;
+	line-height: normal;
+	max-height: 3em;
+  
+  flex: 2 0 250px;
+}
+
+.searchform input {
+  background: Thistle;
+  color: white;
+  letter-spacing: .1em;
+  transition: background 400ms ease-in-out;
+  outline: none;
+}
+.searchform  label {
+  position: absolute;
+  left: -99999px;
+}
+data/db.json
+{
+    "items": [
+        {
+            "id": 1,
+            "checked": false,
+            "item": "Satnhiya"
+        }
+       
+
+    ]
+}
+
+import Header from './Header';
+import { Routes, Route , Link} from 'react-router-dom';
+import './App.css'; 
+import Newpost from './Newpost';
+import Postpage from './Postpage';
+import PostFun from './PostFun';
+
+function App() {
+ 
+  return (
+    <div className="App">
+      <nav>
+        <ul>
+          <li><Link to="/"> Home</Link></li>
+          <li><Link to="/newpost1"> NewPost</Link></li>
+          <li><Link to="/postpage"> PostPage</Link></li>
+        </ul>
+      </nav>
+        <Routes>
+          <Route path="/" element={<Header />} />
+          <Route path="/newpost1" element={<Newpost />} />
+          <Route path="/postpage" element={<Postpage />} />
+          <Route path="/postpage/:id" element={<PostFun />} />
+          <Route path="*" element={<Missing />} />
+        </Routes>
+    </div>
+  );
+}
+
+export default App;
+
+
+import { BrowserRouter } from 'react-router-dom';
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <BrowserRouter> 
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+);
+
+
+import React from 'react'
+import { Link } from 'react-router-dom'
+
+
+const Postpage = () => {
+  return (
+    <main><h1>Postpage</h1>
+  
+    <Link to="/postpage/1"> Post 1</Link>
+    <br></br>
+    <Link to="/postpage/2"> Post 2</Link>
+    <br></br>
+    <Link to="/postpage/3"> Post 3</Link>
+    </main>
+  )
+}
+
+export default Postpage
+
+import React from 'react'
+import { useParams } from 'react-router-dom'
+
+const PostFun = () => {
+    const {id} = useParams()
+  return (
+    <div>PostFun {id} </div>
+  )
+}
+
+export default PostFun
